@@ -1,0 +1,22 @@
+version: 2
+render: NetworkManager
+ethernets:
+  enp99s02:
+    dhcp4: false
+  enp105s0f0: # Innen
+    dhcp4: false
+    addresses:
+      - 10.100.0.11/24
+    routes:
+      - to: default
+        via: 10.100.0.1
+    nameservers:
+      addresses:
+        - 130.83.139.189
+        - 1.1.1.1
+  enp105s0f1:
+    dhcp4: false
+  enp33s0f0:
+    dhcp4: false
+  enp33s0f1:
+    dhcp4: false
