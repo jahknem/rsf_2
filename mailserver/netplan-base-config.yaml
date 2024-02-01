@@ -6,7 +6,7 @@ ethernets:
   enp105s0f0: # DMZ
     dhcp4: false
     addresses:
-      - 10.1.0.11/24
+      - 10.1.0.12/24
     routes:
       - to: default
         via: 10.1.0.1

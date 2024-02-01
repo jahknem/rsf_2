@@ -1,0 +1,11 @@
+table ip firewall_b {
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+
+        # Allow established and related connections
+        ct state established,related accept
+
+        # Allow DMZ to internet
+        ip saddr 10.1.0.0/24 meta iif "enp105s0f0" oif "enp105s0f1" accept
+    }
+}

@@ -1,0 +1,31 @@
+table ip firewall_a {
+    chain forward {
+        type filter hook forward priority 0; policy drop;
+
+        # Allow established and related connections
+        ct state established,related accept
+
+        # Allow 10.0.0.0/8 to access the internet
+        ip saddr 10.0.0.0/8 meta iif "enp105s0f1" meta oif "enp105s0f0" accept
+
+        # Allow incoming connections to 10.1.0.11 port 80 from the internet
+        ip daddr 10.1.0.11 tcp dport 80 meta iif "enp105s0f0" meta oif "enp105s0f1" accept
+    }
+    # NAT table for Source and Destination NAT
+    table ip nat {
+        chain postrouting {
+            type nat hook postrouting priority srcnat;
+
+            # Apply SNAT for traffic going out to the internet from the DMZ
+            ip saddr 10.0.0.0/8 meta oif "enp105s0f0" masquerade
+        }
+
+        # Optionally, if you need DNAT (for incoming connections to specific services)
+        chain prerouting {
+            type nat hook prerouting priority dstnat;
+
+            # Example DNAT rule for incoming connections to a specific internal service
+            # tcp dport dnat to 10.1.0.11:80
+        }
+    }
+}
